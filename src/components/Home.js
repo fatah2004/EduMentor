@@ -9,6 +9,7 @@ const Home = ({ user, onLogout }) => {
   return (
     <div>
       <h2>Welcome, {user.username}!</h2>
+      <h4>Youre role is: {user.role}</h4>
       <button onClick={handleLogout}>Logout</button> {/* Call handleLogout when the button is clicked */}
     </div>
   );

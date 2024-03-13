@@ -29,7 +29,7 @@ app.post('/api/login', async (req, res) => {
     const [rows] = await pool.query('SELECT * FROM User WHERE Username = ?', [username]);
     if (rows.length === 1) {
       const user = rows[0];
-      if ("admin"==user.Password) {
+      if (password==user.Password) {
         req.session.user = { id: user.UserID, username: user.Username, role: user.UserRole };
         res.json({ success: true, user: req.session.user });
       } else {

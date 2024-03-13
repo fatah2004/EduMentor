@@ -1,8 +1,10 @@
 // server.js
 const express = require('express');
+const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const cookieSession = require('cookie-session');
+const bcrypt = require('bcrypt');
+const pool = require('./db');
 
 const app = express();
 
@@ -11,33 +13,40 @@ app.use(cors({
   credentials: true // Allow cookies to be sent
 }));
 app.use(bodyParser.json());
-app.use(cookieSession({
-  name: 'session',
-  keys: ['your_secret_key'], // Change this to a secure random string
-  maxAge: 24 * 60 * 60 * 1000, // Session expiry time (in milliseconds)
+app.use(session({
+  secret: 'your_secret_key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000 // Session expiry time (in milliseconds)
+  }
 }));
 
-// Dummy user data (replace with your actual user authentication mechanism)
-const users = [
-  { id: 1, username: 'user', password: 'password' }
-];
-
 // Login endpoint
-app.post('/api/login', (req, res) => {
+app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
-  const user = users.find(u => u.username === username && u.password === password);
-  if (user) {
-    req.session.user = user;
-    console.log(req.session.user)
-    res.json({ success: true, user });
-  } else {
-    res.status(401).json({ success: false, message: 'Invalid username or password' });
+  try {
+    const [rows] = await pool.query('SELECT * FROM User WHERE Username = ?', [username]);
+    if (rows.length === 1) {
+      const user = rows[0];
+      if ("admin"==user.Password) {
+        req.session.user = { id: user.UserID, username: user.Username, role: user.UserRole };
+        res.json({ success: true, user: req.session.user });
+      } else {
+        res.status(401).json({ success: false, message: 'Invalid username or password' });
+      }
+    } else {
+      res.status(401).json({ success: false, message: 'Invalid username or password' });
+    }
+  } catch (error) {
+    console.error('Login failed:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 });
 
 // Logout endpoint
 app.get('/api/logout', (req, res) => {
-  req.session = null; // Clear the session data
+  req.session.destroy();
   res.json({ success: true });
 });
 
@@ -46,7 +55,6 @@ app.get('/api/me', (req, res) => {
   const user = req.session.user;
   if (user) {
     res.json({ loggedIn: true, user });
-    console.log(req.session.user)
   } else {
     res.json({ loggedIn: false });
   }

@@ -36,7 +36,7 @@ app.post('/api/login', async (req, res) => {
         res.status(401).json({ success: false, message: 'Invalid username or password' });
       }
     } else {
-      res.status(401).json({ success: false, message: 'Invalid username or password' });
+      res.status(401).json({ success: false, message: 'Invalid username orpmm password' });
     }
   } catch (error) {
     console.error('Login failed:', error);

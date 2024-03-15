@@ -2,30 +2,20 @@
 CREATE TABLE User (
     UserID INT PRIMARY KEY,
     Username VARCHAR(50) UNIQUE NOT NULL,
-    PasswordHash VARCHAR(100) NOT NULL,
-    UserRole VARCHAR(20) NOT NULL,
-    Email VARCHAR(100) UNIQUE NOT NULL
-);
-
--- Institution Table
-CREATE TABLE Institution (
-    InstitutionID INT PRIMARY KEY,
-    Name VARCHAR(100) NOT NULL,
-    Description TEXT,
-    ContactPerson VARCHAR(50),
-    ContactEmail VARCHAR(100),
-    ContactPhone VARCHAR(20)
-);
-
--- Trainer Table
-CREATE TABLE Trainer (
-    TrainerID INT PRIMARY KEY,
-    FirstName VARCHAR(50) NOT NULL,
-    LastName VARCHAR(50) NOT NULL,
+    Password VARCHAR(100) NOT NULL,
+    UserRole VARCHAR(20) NOT NULL, -- Role can be 'admin', 'trainer', or 'institution'
+    Email VARCHAR(100) UNIQUE NOT NULL,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
     Bio TEXT,
-    Qualifications TEXT,
-    AreasOfExpertise TEXT,
-    AvailabilityStatus VARCHAR(20) DEFAULT 'Available'
+    Qualifications TEXT, -- For trainers
+    AreasOfExpertise TEXT, -- For trainers
+    AvailabilityStatus VARCHAR(20) DEFAULT 'Available', -- For trainers
+    InstitutionName VARCHAR(100), -- For institutions
+    InstitutionDescription TEXT, -- For institutions
+    ContactPerson VARCHAR(50), -- For institutions
+    ContactEmail VARCHAR(100), -- For institutions
+    ContactPhone VARCHAR(20) -- For institutions
 );
 
 -- TrainingProgram Table

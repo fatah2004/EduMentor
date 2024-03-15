@@ -7,7 +7,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/user-data');
+        const response = await axios.get('http://localhost:3000/api/user-data');
         setUserData(response.data); // Assuming the server sends userData directly
       } catch (error) {
         console.error('Error fetching user data:', error);

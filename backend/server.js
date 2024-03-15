@@ -60,5 +60,97 @@ app.get('/api/me', (req, res) => {
   }
 });
 
+
+
+// Endpoint to add a user
+app.post('/api/users', async (req, res) => {
+  const {
+    username,
+    password,
+    email,
+    userRole,
+    firstName,
+    lastName,
+    bio,
+    areasOfExpertise,
+    institutionName,
+    institutionDescription,
+    contactPerson,
+    contactEmail,
+    contactPhone
+  } = req.body;
+
+  try {
+    // Hash the password
+
+    // Insert user into the database based on user role
+    let insertUserQuery = '';
+    let insertUserData = [];
+    if (userRole === 'institution') {
+      insertUserQuery = 'INSERT INTO User (Username, Password, Email, UserRole, InstitutionName, InstitutionDescription, ContactPerson, ContactEmail, ContactPhone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+      insertUserData = [username, password, email, userRole, institutionName, institutionDescription, contactPerson, contactEmail, contactPhone];
+    } else if (userRole === 'trainer') {
+      insertUserQuery = 'INSERT INTO User (Username, Password, Email, UserRole, FirstName, LastName, Bio,  AreasOfExpertise, AvailabilityStatus) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+      insertUserData = [username, password, email, userRole, firstName, lastName, bio,  areasOfExpertise, "Available"];
+    }
+
+    await pool.execute(insertUserQuery, insertUserData);
+
+    res.status(201).json({ success: true, message: 'User added successfully' });
+  } catch (error) {
+    console.error('Error adding user:', error);
+    res.status(500).json({ success: false, message: 'Failed to add user' });
+  }
+});
+
+// Endpoint to fetch feedbacks
+app.get('/api/feedbacks', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM Feedback');
+    res.json(rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+// Endpoint to fetch formations
+app.get('/api/formations', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM TrainingProgram');
+    res.json(rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+// Endpoint to fetch users
+app.get('/api/users', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM User');
+    res.json(rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+
+// Endpoint to add a formation
+app.post('/api/formations', async (req, res) => {
+  const { title, description, startDate, endDate, location, status, institutionID, trainerID } = req.body;
+  const addFormationQuery = 'INSERT INTO TrainingProgram (Title, Description, StartDate, EndDate, Location, Status, InstitutionID, TrainerID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+
+  try {
+    await pool.execute(addFormationQuery, [title, description, startDate, endDate, location, status, institutionID, trainerID]);
+    res.json({ success: true, message: 'Formation added successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Error adding formation' });
+  }
+});
+
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

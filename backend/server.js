@@ -103,6 +103,19 @@ app.post('/api/users', async (req, res) => {
   }
 });
 
+// Get all institutions (users with the role 'institution')
+app.get('/api/institutions', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM User WHERE UserRole = ?', ['institution']);
+    res.json(rows);
+  } catch (error) {
+    console.error('Error fetching institutions:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+
+
 // Endpoint to fetch feedbacks
 app.get('/api/feedbacks', async (req, res) => {
   try {
@@ -135,6 +148,8 @@ app.get('/api/users', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
+
 
 
 // Endpoint to add a formation

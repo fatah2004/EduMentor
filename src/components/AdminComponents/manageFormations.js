@@ -15,7 +15,7 @@ const ManageFormations = () => {
   useEffect(() => {
     const fetchFormations = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/formations');
+        const response = await axios.get('http://localhost:5000/api/formations');
         setFormations(response.data);
       } catch (error) {
         console.error('Error fetching formations:', error);
@@ -28,7 +28,7 @@ const ManageFormations = () => {
 
   const handleAddFormation = async () => {
     try {
-      await axios.post('http://localhost:3001/api/formations', {
+      await axios.post('http://localhost:5000/api/formations', {
         title,
         description,
         startDate,

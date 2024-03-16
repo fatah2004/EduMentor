@@ -24,12 +24,12 @@ const Navbar = ({user,onLogout}) => {
                     </li>
                     <li className="nav-item">
                       <Link className="nav-link" to="/manage-formations">
-                        Manage Formations
+                        Manage Trainings
                       </Link>
                     </li>
                     <li className="nav-item">
                       <Link className="nav-link" to="/manage-feedback">
-                        Manage Feedback
+                        Manage Feedbacks
                       </Link>
                     </li>
                   </>)}

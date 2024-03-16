@@ -7,9 +7,7 @@ const ManageFormations = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [location, setLocation] = useState('');
-  const [status, setStatus] = useState('');
-  const [institutionID, setInstitutionID] = useState('');
-  const [trainerID, setTrainerID] = useState('');
+  const [trainersID, setTrainersID] = useState('');
   const [formations, setFormations] = useState([]);
 
   useEffect(() => {
@@ -23,7 +21,7 @@ const ManageFormations = () => {
     };
 
     fetchFormations();
-  }, []);
+  }, [formations]);
 
 
   const handleAddFormation = async () => {
@@ -34,9 +32,7 @@ const ManageFormations = () => {
         startDate,
         endDate,
         location,
-        status,
-        institutionID,
-        trainerID
+        trainersID
       });
       alert('Formation added successfully');
       // Optionally, update the formation list after adding the formation
@@ -56,9 +52,7 @@ const ManageFormations = () => {
         <input type="date" placeholder="Start Date" value={startDate} onChange={e => setStartDate(e.target.value)} />
         <input type="date" placeholder="End Date" value={endDate} onChange={e => setEndDate(e.target.value)} />
         <input type="text" placeholder="Location" value={location} onChange={e => setLocation(e.target.value)} />
-        <input type="text" placeholder="Status" value={status} onChange={e => setStatus(e.target.value)} />
-        <input type="number" placeholder="Institution ID" value={institutionID} onChange={e => setInstitutionID(e.target.value)} />
-        <input type="number" placeholder="Trainer ID" value={trainerID} onChange={e => setTrainerID(e.target.value)} />
+        <input type="number" placeholder="Trainer ID" value={trainersID} onChange={e => setTrainersID(e.target.value)} />
         <button onClick={handleAddFormation}>Add Formation</button>
       </div>
       </div>

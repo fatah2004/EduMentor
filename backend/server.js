@@ -154,11 +154,11 @@ app.get('/api/users', async (req, res) => {
 
 // Endpoint to add a formation
 app.post('/api/formations', async (req, res) => {
-  const { title, description, startDate, endDate, location, status, institutionID, trainerID } = req.body;
-  const addFormationQuery = 'INSERT INTO TrainingProgram (Title, Description, StartDate, EndDate, Location, Status, InstitutionID, TrainerID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+  const { title, description, startDate, endDate, location, trainersID } = req.body;
+  const addFormationQuery = 'INSERT INTO TrainingProgram (Title, Description, StartDate, EndDate, Location,UserID) VALUES (?, ?, ?, ?, ?, ?)';
 
   try {
-    await pool.execute(addFormationQuery, [title, description, startDate, endDate, location, status, institutionID, trainerID]);
+    await pool.execute(addFormationQuery, [title, description, startDate, endDate, location, trainersID]);
     res.json({ success: true, message: 'Formation added successfully' });
   } catch (error) {
     console.error(error);

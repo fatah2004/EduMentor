@@ -1,3 +1,7 @@
+// Aichi kan hna
+//git add . 
+//git commit -m ""
+//git push .
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -7,7 +11,7 @@ const ManageFeedbacks = () => {
   useEffect(() => {
     const fetchFeedbacks = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/feedbacks');
+        const response = await axios.get('http://localhost:5000/api/feedbacks');
         setFeedbacks(response.data);
       } catch (error) {
         console.error('Error fetching feedbacks:', error);
